@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <ul class="list-group">
+            {% for product in products %}
+                <li class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="media">
+                        {% if product.cover %}
+                            <img class="mr-3 product-cover" src="{{ asset("storage/#{product.cover.filename}") }}"
+                                 alt="{{ product.cover.title }}">
+                        {% endif %}
+                        <div class="media-body">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ product.title }}</h5>
+                                <big class="text-primary">{{ product.price|number_format }} {{ currency }}</big>
+                            </div>
+                            <p class="mb-1">{{ product.description|default('Product without description') }}</p>
+                            <small>{{ product.updatedAt|date }}</small>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+            <a class="list-group-item list-group-item-action list-group-item-light" href="{{ url('category_index') }}">
+                Back to categories list
+            </a>
+        </ul>
+        <div class="row justify-content-md-center mt-3">
+            <div class="col-md-8">
+                {{ knp_pagination_render(products) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

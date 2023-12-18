@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category List{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% for category in categories %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#{{ 'collapse-' ~ category.id }}">
+                        {{ category.name }}
+                        <span class="badge badge-primary badge-pill">{{ category.totalProducts }}</span>
+                    </button>
+                    <a href="{{ path('category_show', { 'slug': category.slug }) }}" class="btn btn-primary float-right" disabled>More...</a>
+                </div>
+                <div id="{{ 'collapse-' ~ category.id }}" class="collapse show">
+                    <div class="card-body">
+                        {% if category.lastProducts.count > 0 %}
+                            <div class="card-deck">
+                                {% for product in category.lastProducts %}
+                                    {% include 'category/preview_product.html.twig' with { 'product': product } only %}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            Not products found
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="card">
+                <div class="card-body">Not records found</div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
